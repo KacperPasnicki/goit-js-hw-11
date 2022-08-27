@@ -38,7 +38,13 @@ list-style: none;
 
 .photo-card {
 display: none;
-
-
 }
 
+.load-more{
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  display: none;
+
+}
