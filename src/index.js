@@ -8,7 +8,7 @@
 const form = document.querySelector(".form")
 const word = document.querySelector('.word').value
 const gallery = document.querySelector(".gallery")
-const searchButton = document.querySelector(".searchButton")
+const searchButton = document.querySelector(".search-button")
 const page = "1"
 const per_page = "20"
 const  q = "submit.textContent"
@@ -19,10 +19,10 @@ const API_KEY = '29532345-deb84d68428e9d4fffb51e10d'
 // const URL = 'https://pixabay.com/api/'
 
 function searchItems(items) {
-  const markup = items
-    .map(item=>{
-       `<div class="photo-card">
-      <img src="${item.largeImageURL}" alt="item.tags" loading="lazy" />
+  let markup = items
+    .map(item => {
+    return   `<div class="photo-card">
+      <a href='${item.largeImageURL}'><img src='${item.webformatURL}' alt="${item.tags}" loading="lazy" title=""/></a>
       <div class="info">
         <p class="info-item">
           <b>Likes</b>:${item.likes}
@@ -45,19 +45,20 @@ function searchItems(items) {
 
 
 
-const fetchPixabay = async (word, page) => {
+const fetchPixabay = async (search, pageNr) => {
     
-    const response = await fetch(`https://pixabay.com/api/?key=${API_KEY}&q=${word}&image_type=photo&pretty=true&orientation=horizontal&safesearch=true&page=${page}&per_page=${per_page}`)
+    const response = await fetch(`https://pixabay.com/api/?key=${API_KEY}&q=${word}&image_type=photo&pretty=true&orientation=horizontal&safesearch=true&page=${pageNr}&per_page=${per_page}`)
       
             const result = await response.json() 
       return result;
 }
 
 searchButton.addEventListener('click', async e => {
-    
+  
     try {
+      
         e.preventDefault();
-        const { searchButton, word } = e.currentTarget;
+        const { input, word } = e.currentTarget;
         page = 1
         let trimmed = word.value.trim()
         if (trimmed === '')  {
@@ -76,9 +77,9 @@ if (find.length === 0) {
     console.log("Sorry, there are no images matching your search query. Please try again.");
   }
     //  .then(searchItems(items))
-     
+    searchItems(find)
     
-    searchItems(find)}
+}   
 catch (error) {
     console.log('nie działa!');
 }
