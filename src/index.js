@@ -61,7 +61,7 @@ function renderItems(items) {
 
 loadMoreBtn.addEventListener('click', onLoadMoreBtn)
 
-searchButton.addEventListener('click', searchForm)
+searchButton.addEventListener('submit', searchForm)
 //   e.preventDefault();
 //   page = 1
   
@@ -99,6 +99,7 @@ searchButton.addEventListener('click', searchForm)
   try {
 
     e.preventDefault();
+    
       page = 1
       query  = e.currentTarget.searchQuery.value.trim();
         if (query === '') {
