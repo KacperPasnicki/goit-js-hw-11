@@ -21,7 +21,7 @@ let query = ''
 // const URL = 'https://pixabay.com/api/'
 const fetchPixabay = async (query, pageNr) => {
     
-  const response = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${per_page}&page=${pageNr}`)
+  const response = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&per_page=${per_page}&page=${pageNr}`)
     
           
     return response;
@@ -54,7 +54,7 @@ function renderitems(items) {
   </a>`
 })
     .join("");
-    gallery.innerHTML = markup
+    gallery.insertAdjacentHTML('beforend', markup) = markup;
 }
 
 
@@ -75,7 +75,7 @@ searchButton.addEventListener('submit', async e => {
    loadMoreBtn.classList.add('is-hidden')
     try {
       
-      const photos = await fetchPixabay(query, page)
+      const photos = await fetchPixabay(query, pageNr)
       const data = photos.data
        if (data.totalHits === 0) {
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
@@ -91,21 +91,7 @@ searchButton.addEventListener('submit', async e => {
 
        }
     }
-//    localStorage.setItem('text', `${trimmed}`)
-//    gallery.innerHTML = '';
-//     const photos = await fetchPixabay(trimmed, page)
-//     const find = photos.hits
-//     const parseInt = photos.totalHits
-//     if (parseInt > 0) {
-//      console.log(`Horaay ${parseInt}`);; 
-//      searchItems(find)
-//     }
-// if (find.length === 0) {
-//   throw new Error()
-//   }
-//     //  .then(searchItems(items))
-//     console.log(searchItems(find))
-  
+
  
 catch (error) {
  
@@ -117,7 +103,7 @@ catch (error) {
   async function onLoadMoreBtn() {
     page +=1
     try {
-      const photos = await fetchPixabay(trimmed, page)
+      const photos = await fetchPixabay(query, pageNr)
       const data = photos.data
       renderitems(data.hits)
       lightbox.refresh();
@@ -145,3 +131,33 @@ if (data.totalHits >= per_page) {
 }
 
   }
+
+  // window.addEventListener(
+  //   'scroll',
+  //   debounce(async event => {
+  //     try {
+  //       if (window.innerHeight === document.documentElement.scrollHeight) {
+  //         return;
+  //       }
+  //       if (
+  //         window.scrollY + 0.5 + window.innerHeight >=
+  //         document.documentElement.scrollHeight
+  //       ) {
+  //         page += 1;
+  //         let query = localStorage.getItem('inputValue');
+  //         const photos = await fetchPhotos(trimInput, page);
+  //         const data = phtotos.hits;
+  
+  //         renderNextPhotos(photos);
+  //         lightbox.refresh();
+  //         const { height: cardHeight } = document
+  //           .querySelector('.gallery')
+  //           .firstElementChild.getBoundingClientRect();
+  //         window.scrollBy({
+  //           top: cardHeight * 1.5,
+  //           behavior: 'smooth',
+  //         });
+  //       }
+  //     } catch (error) {}
+  //   }, 100)
+  // );
