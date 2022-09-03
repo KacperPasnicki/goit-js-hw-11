@@ -16,7 +16,7 @@ const searchButton = document.querySelector(".search-button")
 const page = 1
 const per_page = 40
 const lightbox = new SimpleLightbox('.gallery a')
-const loadMoreBtn =document.querySelector('.load-more')
+const loadMoreBtn = document.querySelector('.load-more')
 let query = ''
 // const URL = 'https://pixabay.com/api/'
 const fetchPixabay = async (query, pageNr) => {
@@ -58,32 +58,6 @@ function renderitems(items) {
 }
 
 
-// function searchItems(items) {
-//   let markup = items
-//     .map(item => {
-//     return   `<div class="photo-card">
-//       <a href='${item.largeImageURL}'><img src='${item.webformatURL}' alt="${item.tags}" loading="lazy" title=""/></a>
-//       <div class="info">
-//         <p class="info-item">
-//           <b>Likes</b>${item.likes}
-//         </p>
-//         <p class="info-item">
-//           <b>Views</b>${item.views}
-//         </p>
-//         <p class="info-item">
-//           <b>Comments</b>${item.comments}
-//         </p>
-//         <p class="info-item">
-//           <b>Downloads</b>${item.downloads}
-//         </p>
-//       </div>
-//     </div>`
-// })
-//     .join("");
-//     gallery.innerHTML = markup;
-// }
-
-
 
 loadMoreBtn.addEventListener('click', onLoadMoreBtn)
 
@@ -93,7 +67,7 @@ searchButton.addEventListener('submit', async e => {
   query  = e.currentTarget.searchQueary.value.trim();
   if (query === '') {
     Notiflix.Notify.failure(`Oops, the search input cannot be empty, {width: "350px", timeout: 1500}`)
-    return
+    return;
   }
 
   gallery.innerHTML = '';
@@ -102,13 +76,13 @@ searchButton.addEventListener('submit', async e => {
       
       const photos = await fetchPixabay(query, page)
       const data = photos.data
-       if (find.length === 0) {
+       if (data.totalHits === 0) {
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
        } else {
         renderitems(data.hits)
           lightbox.refresh()
             Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`)
-            onSearchNotification(data)
+            onSearchNotification(data);
           
 
 
@@ -133,7 +107,7 @@ searchButton.addEventListener('submit', async e => {
   
  
 catch (error) {
-  gallery.innerHTML = '';
+ 
     console.log('error');
 }
   });
@@ -150,7 +124,7 @@ catch (error) {
       const photos = await fetchPixabay(trimmed, page)
       const data = photos.data
       renderitems(data.hits)
-      lightbox.refresh()
+      lightbox.refresh();
       onSearchNotification(data)
     }
     catch(error) {
