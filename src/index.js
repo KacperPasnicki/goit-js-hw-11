@@ -54,7 +54,7 @@ function renderitems(items) {
   </a>`
 })
     .join("");
-    gallery.insertAdjacentHTML('beforend', markup) = markup;
+    gallery.insertAdjacentHTML('beforend', markup);
 }
 
 
@@ -132,32 +132,3 @@ if (data.totalHits >= per_page) {
 
   }
 
-  // window.addEventListener(
-  //   'scroll',
-  //   debounce(async event => {
-  //     try {
-  //       if (window.innerHeight === document.documentElement.scrollHeight) {
-  //         return;
-  //       }
-  //       if (
-  //         window.scrollY + 0.5 + window.innerHeight >=
-  //         document.documentElement.scrollHeight
-  //       ) {
-  //         page += 1;
-  //         let query = localStorage.getItem('inputValue');
-  //         const photos = await fetchPhotos(trimInput, page);
-  //         const data = phtotos.hits;
-  
-  //         renderNextPhotos(photos);
-  //         lightbox.refresh();
-  //         const { height: cardHeight } = document
-  //           .querySelector('.gallery')
-  //           .firstElementChild.getBoundingClientRect();
-  //         window.scrollBy({
-  //           top: cardHeight * 1.5,
-  //           behavior: 'smooth',
-  //         });
-  //       }
-  //     } catch (error) {}
-  //   }, 100)
-  // );
