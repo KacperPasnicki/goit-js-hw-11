@@ -45,6 +45,11 @@ display: none;
   margin-left: auto;
   margin-right: auto;
   text-align: left;
-  display: none;
+ 
+
+}
+.load-more.is-hidden
+{
+display: none;
 
 }

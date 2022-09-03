@@ -1,87 +1,139 @@
-//  import Notiflix from 'notiflix';
-//  import debounce from 'lodash.debounce'
-// // Opisany w dokumentacji
-// import SimpleLightbox from 'simplelightbox';
-// // // Dodatkowy import stylów
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+  import axios from 'axios'
+  import Notiflix from 'notiflix';
+   import debounce from 'lodash.debounce'
+// /// Opisany w dokumentacji
+  import SimpleLightbox from 'simplelightbox';
+// // // // Dodatkowy import stylów
 
-const form = document.querySelector(".form")
+ import 'simplelightbox/dist/simple-lightbox.min.css';
+
+const API_KEY = '29532345-deb84d68428e9d4fffb51e10d'
+const form = document.querySelector(".search-form")
 const word = document.querySelector('.word').value
 const gallery = document.querySelector(".gallery")
 const searchButton = document.querySelector(".search-button")
-const page = "1"
-const per_page = "20"
-const  q = "submit.textContent"
-const image_type =  "photo"
-const orientation = "horizontal"
-const safesearch = "true"
-const API_KEY = '29532345-deb84d68428e9d4fffb51e10d'
+const page = 1
+const per_page = 40
+const lightbox = new SimpleLightbox('.gallery a')
+const loadMoreBtn =document.querySelector('.load-more')
+let query = ''
 // const URL = 'https://pixabay.com/api/'
+const fetchPixabay = async (query, pageNr) => {
+    
+  const response = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${per_page}&page=${pageNr}`)
+    
+          
+    return response;
+};
 
-function searchItems(items) {
-  let markup = items
-    .map(item => {
-    return   `<div class="photo-card">
-      <a href='${item.largeImageURL}'><img src='${item.webformatURL}' alt="${item.tags}" loading="lazy" title=""/></a>
+function renderitems(items) {
+  const markup = items
+    .map(item=>{
+      const { id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image
+      return
+
+       `<a href='${largeImageURL}'> 
+       <div class="photo-card" id= "${id}">
+      <img src="${webformatURL}" alt="${tags}" loading="lazy" />
       <div class="info">
         <p class="info-item">
-          <b>Likes</b>:${item.likes}
+          <b>likes</b>${likes}
         </p>
         <p class="info-item">
-          <b>Views</b>:${item.views}
+          <b>views</b>${views}
         </p>
         <p class="info-item">
-          <b>Comments</b>:${item.comments}
+          <b>comments</b>${comments}
         </p>
         <p class="info-item">
-          <b>Downloads</b>:${item.downloads}
+          <b>downloads</b>${downloads}
         </p>
       </div>
-    </div>`
+    </div>
+  </a>`
 })
     .join("");
-    gallery.innerHTML = markup;
+    gallery.insertAdjacentHTML('beforend', markup) = markup;
 }
 
 
+// function searchItems(items) {
+//   let markup = items
+//     .map(item => {
+//     return   `<div class="photo-card">
+//       <a href='${item.largeImageURL}'><img src='${item.webformatURL}' alt="${item.tags}" loading="lazy" title=""/></a>
+//       <div class="info">
+//         <p class="info-item">
+//           <b>Likes</b>${item.likes}
+//         </p>
+//         <p class="info-item">
+//           <b>Views</b>${item.views}
+//         </p>
+//         <p class="info-item">
+//           <b>Comments</b>${item.comments}
+//         </p>
+//         <p class="info-item">
+//           <b>Downloads</b>${item.downloads}
+//         </p>
+//       </div>
+//     </div>`
+// })
+//     .join("");
+//     gallery.innerHTML = markup;
+// }
 
-const fetchPixabay = async (search, pageNr) => {
-    
-    const response = await fetch(`https://pixabay.com/api/?key=${API_KEY}&q=${word}&image_type=photo&pretty=true&orientation=horizontal&safesearch=true&page=${pageNr}&per_page=${per_page}`)
-      
-            const result = await response.json() 
-      return result;
-}
 
-searchButton.addEventListener('click', async e => {
-  
+
+loadMoreBtn.addEventListener('click', onLoadMoreBtn)
+
+searchButton.addEventListener('submit', async e => {
+  page = 1
+  e.preventDefault();
+  query  = e.currentTarget.searchQueary.value.trim();
+  if (query === '') {
+    Notiflix.Notify.failure(`Oops, the search input cannot be empty, {width: "350px", timeout: 1500}`)
+    return
+  }
+
+  gallery.innerHTML = '';
+   loadMoreBtn.classList.add('is-hidden')
     try {
       
-        e.preventDefault();
-        const { input, word } = e.currentTarget;
-        page = 1
-        let trimmed = word.value.trim()
-        if (trimmed === '')  {
-            
-            return;
+      const photos = await fetchPixabay(query, page)
+      const data = photos.data
+       if (find.length === 0) {
+        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+       } else {
+        renderitems(data.hits)
+          lightbox.refresh()
+            Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`)
+            onSearchNotification(data)
+          
+
+
+
+
+       }
     }
-   localStorage.setItem('word', `${trimmed}`)
-   gallery.innerHTML = '';
-    const photos = await fetchPixabay(trimmed, page)
-    const find = photos.hits
-    const parseInt = photos.totalHits
-    if (parseInt > 0) {
-     console.log(`Horaay ${parseInt}`);; 
-    }
-if (find.length === 0) {
-    console.log("Sorry, there are no images matching your search query. Please try again.");
-  }
-    //  .then(searchItems(items))
-    searchItems(find)
-    
-}   
+//    localStorage.setItem('text', `${trimmed}`)
+//    gallery.innerHTML = '';
+//     const photos = await fetchPixabay(trimmed, page)
+//     const find = photos.hits
+//     const parseInt = photos.totalHits
+//     if (parseInt > 0) {
+//      console.log(`Horaay ${parseInt}`);; 
+//      searchItems(find)
+//     }
+// if (find.length === 0) {
+//   throw new Error()
+//   }
+//     //  .then(searchItems(items))
+//     console.log(searchItems(find))
+  
+ 
 catch (error) {
-    console.log('nie działa!');
+  gallery.innerHTML = '';
+    console.log('error');
 }
   });
 
@@ -90,27 +142,35 @@ catch (error) {
 
 
 
-function renderItems(items) {
-    const markup = items
-      .map(item=>{
-         `<div class="photo-card">
-        <img src="" alt="" loading="lazy" />
-        <div class="info">
-          <p class="info-item">
-            <b>Likes</b>
-          </p>
-          <p class="info-item">
-            <b>Views</b>
-          </p>
-          <p class="info-item">
-            <b>Comments</b>
-          </p>
-          <p class="info-item">
-            <b>Downloads</b>
-          </p>
-        </div>
-      </div>`
-})
-      .join("");
-      gallery.innerHTML = markup;
+
+  async function onLoadMoreBtn() {
+    page +=1
+    try {
+      const photos = await fetchPixabay(trimmed, page)
+      const data = photos.data
+      renderitems(data.hits)
+      lightbox.refresh()
+      onSearchNotification(data)
+    }
+    catch(error) {
+      console.log(error)
+    }
+  }
+
+  function onSearchNotification(data) {
+const totalPages = Math.ceil(data.totalHits / per_page);
+if (page >= totalPages) {
+  loadMoreBtn.classList.add('is-hidden')
+  Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
+  return
+}
+if (data.totalHits=== 0) {
+Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
+
+}
+if (data.totalHits >= per_page) {
+
+  loadMoreBtn.classList.remove('is-hidden')
+}
+
   }
