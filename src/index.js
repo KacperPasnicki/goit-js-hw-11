@@ -9,8 +9,8 @@
  import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const API_KEY = '29532345-deb84d68428e9d4fffb51e10d';
-const form = document.querySelector(".search-form");
-const word = document.querySelector('.word').value
+ const form = document.querySelector(".search-form");
+// const word = document.querySelector('.word').value
 const gallery = document.querySelector(".gallery");
 const searchButton = document.querySelector(".search-button");
 const page = 1;
@@ -27,13 +27,13 @@ const fetchPixabay = async (query, page) => {
     return response;
 };
 
-function renderItems(items) {
-  const markup = items
-    .map(item => {
+function renderItems(images) {
+  const markup = images
+    .map(image => {
       const { id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image
       
 
-       `<a href='${largeImageURL}'> 
+   return   `<a href='${largeImageURL}'> 
        <div class="photo-card" id= "${id}">
       <img src="${webformatURL}" alt="${tags}" loading="lazy" />
       <div class="info">
@@ -61,7 +61,7 @@ function renderItems(items) {
 
 loadMoreBtn.addEventListener('click', onLoadMoreBtn)
 
-searchButton.addEventListener('submit', searchForm)
+form.addEventListener('submit', searchForm)
 //   e.preventDefault();
 //   page = 1
   
@@ -96,23 +96,22 @@ searchButton.addEventListener('submit', searchForm)
 
 
  async function searchForm(e) {
-  try {
-
+  try { 
     e.preventDefault();
+    page = 1;
+    query = e.currentTarget.searchQuery.value.trim();
     
-      page = 1
-      query  = e.currentTarget.searchQuery.value.trim();
         if (query === '') {
       
-            Notiflix.Notify.failure(`Oops, the search input cannot be empty, {width: "350px", timeout: 1500}`)
+            Notiflix.Notify.failure(`Oops, the search input cannot be empty`)
         return;
         }
             gallery.innerHTML = '';
-            loadMoreBtn.classList.add('is-hidden')
+            // loadMoreBtn.classList.add('is-hidden')
     
-      
-    const photos = await fetchPixabay(query, page)
-    const data = photos.data
+                  
+    const images = await fetchPixabay(query, page)
+    const data = images.data
      if (data.totalHits === 0) {
            Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
      } else {
@@ -123,8 +122,7 @@ searchButton.addEventListener('submit', searchForm)
    }
 } 
 catch (error) {
-  Notiflix.Notify.failure("ERROR!")
- console.log('ERROR!')
+  gallery.innerHTML = '';
   console.log(error);
 };
  }
@@ -135,9 +133,9 @@ catch (error) {
   async function onLoadMoreBtn() {
     page +=1
     try {
-      const photos = await fetchPixabay(query, page)
-      const data = photos.data
-      renderitems(data.hits)
+      const images = await fetchPixabay(query, page)
+      const data = images.data
+      renderItems(data.hits)
       lightbox.refresh();
       onSearchNotification(data)
     }
@@ -153,7 +151,7 @@ if (page >= totalPages) {
   Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
   return
 }
-if (data.totalHits=== 0) {
+if (data.totalHits === 0) {
 Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
 
 }
