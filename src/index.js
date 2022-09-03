@@ -27,7 +27,7 @@ const fetchPixabay = async (query, page) => {
     return response;
 };
 
-function renderitems(items) {
+function renderItems(items) {
   const markup = items
     .map(item => {
       const { id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image
@@ -96,31 +96,34 @@ searchButton.addEventListener('click', searchForm)
 
 
  async function searchForm(e) {
-  e.preventDefault();
-  page = 1
-  query  = e.currentTarget.searchQuery.value.trim();
-  if (query === '') {
-    
-    Notiflix.Notify.failure(`Oops, the search input cannot be empty, {width: "350px", timeout: 1500}`)
-    return;
-  }
-  gallery.innerHTML = '';
-  loadMoreBtn.classList.add('is-hidden')
   try {
+
+    e.preventDefault();
+      page = 1
+      query  = e.currentTarget.searchQuery.value.trim();
+        if (query === '') {
+      
+            Notiflix.Notify.failure(`Oops, the search input cannot be empty, {width: "350px", timeout: 1500}`)
+        return;
+        }
+            gallery.innerHTML = '';
+            loadMoreBtn.classList.add('is-hidden')
+    
       
     const photos = await fetchPixabay(query, page)
     const data = photos.data
      if (data.totalHits === 0) {
-      Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+           Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
      } else {
-      renderitems(data.hits)
-      lightbox.refresh()
+          renderItems(data.hits)
+          lightbox.refresh()
           Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`)
           onSearchNotification(data);
- }
+   }
 } 
 catch (error) {
- console.log('błąd')
+  Notiflix.Notify.failure("ERROR!")
+ console.log('ERROR!')
   console.log(error);
 };
  }
