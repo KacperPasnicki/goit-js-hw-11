@@ -33,9 +33,9 @@ function renderItems(images) {
       const { id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image
       
 
-   return   `<a href='${largeImageURL}'> 
-       <div class="photo-card" id= "${id}">
-      <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+   return   `<a class="img_card" href='${largeImageURL}'> 
+       <div class="photo-card" id= "${id}"> 
+      <img class="image" src="${webformatURL}" alt="${tags}" loading="lazy" /> 
       <div class="info">
         <p class="info-item">
           <b>likes</b>${likes}
