@@ -138,6 +138,7 @@ catch (error) {
       renderItems(data.hits)
       lightbox.refresh();
       onSearchNotification(data)
+      loadMoreBtn.classList.add('is-hidden')
     }
     catch(error) {
       console.log(error)
@@ -147,6 +148,7 @@ catch (error) {
   function onSearchNotification(data) {
 const totalPages = Math.ceil(data.totalHits / per_page);
 if (page >= totalPages) {
+  
   loadMoreBtn.classList.add('is-hidden')
   Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
   return
@@ -154,11 +156,19 @@ if (page >= totalPages) {
 if (data.totalHits === 0) {
 Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
 
-}
-if (data.totalHits >= per_page) {
+// } if (data.totalHits >= per_page) {
 
-  loadMoreBtn.classList.remove('is-hidden')
-}
+//   loadMoreBtn.classList.remove('is-hidden')
+//  }
 
   }
-
+  window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        // you're at the bottom of the page
+        console.log('end of page')
+        loadMoreBtn.classList.remove('is-hidden')
+    } else
+    {
+      loadMoreBtn.classList.add('is-hidden')
+    }
+};
