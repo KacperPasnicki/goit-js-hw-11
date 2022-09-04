@@ -13,7 +13,7 @@ const API_KEY = '29532345-deb84d68428e9d4fffb51e10d';
 // const word = document.querySelector('.word').value
 const gallery = document.querySelector(".gallery");
 const searchButton = document.querySelector(".search-button");
-const page = 1;
+let page = 1;
 const per_page = 40;
 const lightbox = new SimpleLightbox('.gallery a');
 const loadMoreBtn = document.querySelector('.load-more');
@@ -28,7 +28,7 @@ const fetchPixabay = async (query, page) => {
 };
 
 function renderItems(images) {
-  const markup = images
+  let markup = images
     .map(image => {
       const { id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image
       
@@ -107,7 +107,7 @@ form.addEventListener('submit', searchForm)
         return;
         }
             gallery.innerHTML = '';
-            // loadMoreBtn.classList.add('is-hidden')
+            loadMoreBtn.classList.add('is-hidden')
     
                   
     const images = await fetchPixabay(query, page)
