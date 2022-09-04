@@ -155,10 +155,10 @@ if (data.totalHits === 0) {
 Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
 
 }
-if (data.totalHits >= per_page) {
+// if (data.totalHits >= per_page) {
 
-  loadMoreBtn.classList.remove('is-hidden')
-}
+//   loadMoreBtn.classList.remove('is-hidden')
+// }
 
   }
 
